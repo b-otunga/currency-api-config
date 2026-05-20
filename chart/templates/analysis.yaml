@@ -11,5 +11,5 @@ spec:
     failureLimit: 1
     provider:
       web:
-        url: http://currency-api-canary:8000/health
+        url: http://currency-api-canary.dev.svc.cluster.local:8000/health
         jsonPath: "{$.status}"
