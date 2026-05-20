@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/b-otunga/currency-api
+  tag: sha256:150941fd7866bafa763ea03c8b2fad3f51975a191527d682611b6806263f259e
+  pullPolicy: IfNotPresent
+
+env:
+  APP_ENV: dev
+  APP_VERSION: "1.0.0"
+  USE_LIVE_RATES: "false"
+  FORCE_UNHEALTHY: "false"
+
+service:
+  port: 8000
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi

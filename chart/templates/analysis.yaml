@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AnalysisTemplate
+metadata:
+  name: health-check
+spec:
+  metrics:
+  - name: health-endpoint
+    interval: 30s
+    count: 3
+    successCondition: result == "ok"
+    failureLimit: 1
+    provider:
+      web:
+        url: http://currency-api-canary:8000/health
+        jsonPath: "{$.status}"

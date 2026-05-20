@@ -1,0 +1,11 @@
+replicaCount: 2
+env:
+  APP_ENV: staging
+  USE_LIVE_RATES: "false"
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi

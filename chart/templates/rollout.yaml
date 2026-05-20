@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: currency-api
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: currency-api
+  template:
+    metadata:
+      labels:
+        app: currency-api
+    spec:
+      containers:
+      - name: currency-api
+        image: {{ .Values.image.repository }}@{{ .Values.image.tag }}
+        ports:
+        - containerPort: 8000
+        env:
+        - name: APP_ENV
+          value: {{ .Values.env.APP_ENV | quote }}
+        - name: APP_VERSION
+          value: {{ .Values.env.APP_VERSION | quote }}
+        - name: USE_LIVE_RATES
+          value: {{ .Values.env.USE_LIVE_RATES | quote }}
+        - name: FORCE_UNHEALTHY
+          value: {{ .Values.env.FORCE_UNHEALTHY | quote }}
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 3
+          periodSeconds: 5
+  strategy:
+    canary:
+      canaryService: currency-api-canary
+      stableService: currency-api-stable
+      steps:
+      - setWeight: 20
+      - pause:
+          duration: 1m
+      - analysis:
+          templates:
+          - templateName: health-check
+      - setWeight: 50
+      - pause:
+          duration: 1m
+      - setWeight: 100
