@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/b-otunga/currency-api
-  tag: sha256:150941fd7866bafa763ea03c8b2fad3f51975a191527d682611b6806263f259e
+  tag: sha256:53880661bf2b44843f5e40912713956aac421615b5d8c125d83d8310ef217791
   pullPolicy: IfNotPresent
 
 env:
